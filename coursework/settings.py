@@ -185,6 +185,7 @@ SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 SOCIAL_AUTH_UUID_LENGTH = 16
 
 TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.request',
     'social_auth.context_processors.social_auth_by_name_backends',
