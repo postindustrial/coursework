@@ -4,6 +4,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class CustomUserManager(models.Manager):
+    def create_user(self, username, email):
+        return self.model._default_manager.create(username=username)
 
 class Major (models.Model):
 
@@ -34,7 +37,7 @@ class Student (models.Model):
 
     user = models.OneToOneField(User)
     username = models.CharField(max_length=50)
-    last_login = models.DateTimeField(blank=True)
+    last_login = models.DateTimeField(blank=True, null=True)
     is_active = models.BooleanField()
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
@@ -42,7 +45,10 @@ class Student (models.Model):
     group = models.ForeignKey(Group)
     invite_key = models.CharField(max_length=20)
 
-    people = models.Manager()
+    objects = CustomUserManager()
+
+    def is_authenticated(self):
+        return True
 
     def __unicode__(self):
         return self.last_name

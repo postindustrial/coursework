@@ -3,7 +3,6 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-import os
 from os.path import dirname, join
 
 PROJECT_ROOT = dirname(__file__)
@@ -18,15 +17,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': join(PROJECT_ROOT, 'db.sqlite'),                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
     }
 }
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+
 ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
@@ -162,32 +155,86 @@ LOGGING = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.google.GoogleOAuthBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.google.GoogleBackend',
+    'social_auth.backends.yahoo.YahooBackend',
+    'social_auth.backends.stripe.StripeBackend',
+    'social_auth.backends.contrib.linkedin.LinkedinBackend',
+    'social_auth.backends.contrib.skyrock.SkyrockBackend',
+    'social_auth.backends.contrib.flickr.FlickrBackend',
+    'social_auth.backends.contrib.instagram.InstagramBackend',
+    'social_auth.backends.contrib.github.GithubBackend',
+    'social_auth.backends.contrib.yandex.YandexBackend',
+    'social_auth.backends.contrib.disqus.DisqusBackend',
+    'social_auth.backends.contrib.yahoo.YahooOAuthBackend',
+    'social_auth.backends.contrib.foursquare.FoursquareBackend',
+    'social_auth.backends.OpenIDBackend',
+    'social_auth.backends.contrib.live.LiveBackend',
+    'social_auth.backends.contrib.livejournal.LiveJournalBackend',
+    'social_auth.backends.contrib.douban.DoubanBackend',
+    'social_auth.backends.browserid.BrowserIDBackend',
+    'social_auth.backends.contrib.vkontakte.VKontakteBackend',
+    'social_auth.backends.contrib.yandex.YandexOAuth2Backend',
+    'social_auth.backends.contrib.yandex.YaruBackend',
+    'social_auth.backends.contrib.odnoklassniki.OdnoklassnikiBackend',
+    'social_auth.backends.contrib.odnoklassniki.OdnoklassnikiAppBackend',
+    'social_auth.backends.contrib.vkontakte.VKontakteOAuth2Backend',
+    'social_auth.backends.contrib.mailru.MailruBackend',
+    'social_auth.backends.contrib.dailymotion.DailymotionBackend',
+    'social_auth.backends.contrib.shopify.ShopifyBackend',
+    'social_auth.backends.contrib.stocktwits.StocktwitsBackend',
+    'social_auth.backends.contrib.behance.BehanceBackend',
+    'social_auth.backends.contrib.readability.ReadabilityBackend',
+    'social_auth.backends.steam.SteamBackend',
+    'social_auth.backends.reddit.RedditBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 FACEBOOK_APP_ID = '171438459687513'
 FACEBOOK_API_SECRET = 'a18c469fce891a867515cb63bcba7997'
 
-AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.facebook.FacebookBackend',
-)
+VK_APP_ID = '3646814'
+VKONTAKTE_APP_ID = VK_APP_ID
+VK_API_SECRET = 'yF85xKaipRH0Ow7LojHW'
+VKONTAKTE_APP_SECRET = VK_API_SECRET
 
-LOGIN_URL          = '/login-form/'
-LOGIN_REDIRECT_URL = '/logged-in/'
-LOGIN_ERROR_URL    = '/login-error/'
-
-SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/new-association-redirect-url/'
-
-SOCIAL_AUTH_COMPLETE_URL_NAME  = 'social_auth_complete'
-SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'social_auth_associate_complete'
-
-SOCIAL_AUTH_USER_MODEL = 'info.Student'
-
-SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
-
-SOCIAL_AUTH_UUID_LENGTH = 16
+GOOGLE_OAUTH2_CLIENT_ID = '760243827447.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'QdCRKi_9k2EL2sUxJJueqSa6'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.request',
-    'social_auth.context_processors.social_auth_by_name_backends',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.contrib.messages.context_processors.messages',
+    'social_auth.context_processors.social_auth_by_type_backends',
 )
+
+LOGIN_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.misc.save_status_to_session',
+    'info.pipeline.redirect_to_form',
+    'info.pipeline.username',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details',
+    'social_auth.backends.pipeline.misc.save_status_to_session',
+    'info.pipeline.redirect_to_form2',
+    'info.pipeline.first_name',
+)
+
+try:
+    from local_settings import *
+except:
+    pass
 

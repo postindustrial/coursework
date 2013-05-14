@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="{{ STATIC_URL }}css/main.css">
         {% endblock %}
         <script src="{{ STATIC_URL }}js/vendor/modernizr-2.6.2.min.js"></script>
+        {% block script %}{% endblock %}
     </head>
     <body>
 
@@ -32,34 +33,26 @@
                             <li class="active"><a href="#">Home</a></li>
                             <li><a href="#">About</a></li>
                             <li><a href="#">Contact</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li class="nav-header">Nav header</li>
-                                    <li><a href="#">Separated link</a></li>
-                                    <li><a href="#">One more separated link</a></li>
-                                </ul>
-                            </li>
                         </ul>
-                        <form class="navbar-form pull-right" action="/login">
-                            <input class="span2" type="text" name="username" placeholder="Имя пользователя">
-                            <input class="span2" type="password" name="password" placeholder="Пароль">
-                            <button type="submit" class="btn">Войти</button>
-                        </form>
                 </div>
             </div>
         </div>
+
+        {% block heading %}{% endblock %}
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
         <div class="container">
             {% block content %}{% endblock %}
             <footer>
                 <p>&copy; Umbrella Co. 2012</p>
             </footer>
-
         </div> <!-- /container -->
 
         {% block bottomjs %}
