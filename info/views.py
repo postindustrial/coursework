@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -24,8 +24,11 @@ def home(request):
                                   RequestContext(request))
 
 def index(request):
-    context = {'schedule_all': Schedule.objects.all()}
+    if request.user.is_authenticated():
+        user_group = request.user.group
+        context = {'schedule_personal': Schedule.objects.all().filter(course__group__name=user_group)}
     return render(request, 'frontpage.html', context)
+
 
 #@login_required
 def index_personal(request):
