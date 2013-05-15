@@ -70,9 +70,25 @@
         </div>
     {% endif %}
 
+    Расписание полностью: <br>
 
     <ul>
         {% for item in schedule_all %}
+            <h1>{{ item.day }}</h1>
+            <b> {{ item.course.name }} </b> <br>
+            <b> {{ item.course.teacher.last_name }} </b>
+            <br>
+            <div class="page-header">
+                {{ item.room }} <br>
+                {{ item.building.name }}
+            </div>
+        {% endfor %}
+    </ul>
+
+    Личное расписание для группы {{ user.group }}: <br>
+
+    <ul>
+        {% for item in schedule_personal %}
             <h1>{{ item.day }}</h1>
             <b> {{ item.course.name }} </b> <br>
             <b> {{ item.course.teacher.last_name }} </b>

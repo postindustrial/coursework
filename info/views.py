@@ -1,4 +1,6 @@
 # Create your views here.
+# -*- coding: utf-8 -*-
+
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -7,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.contrib.messages.api import get_messages
-from info.models import Schedule
+from info.models import Student, Day, Week, Schedule, Group, Classes, Course, Major, Taught_Course, Teacher, Final, Building
 
 from social_auth import __version__ as version
 from social_auth.utils import setting
@@ -21,6 +23,15 @@ def home(request):
         return render_to_response('frontpage.html', {'version': version},
                                   RequestContext(request))
 
+def index(request):
+    context = {'schedule_all': Schedule.objects.all()}
+    return render(request, 'frontpage.html', context)
+
+#@login_required
+def index_personal(request):
+    user_group = request.user.group
+    context = {'schedule_personal': Schedule.objects.get(course__group__name=user_group)}
+    return render(request, 'frontpage.html', context)
 
 @login_required
 def done(request):
@@ -66,7 +77,3 @@ def form2(request):
 
 def close_login_popup(request):
     return render_to_response('close_popup.html', {}, RequestContext(request))
-
-def index(request):
-   context = {'schedule_all': Schedule.objects.all()}
-   return render(request, 'frontpage.html', context)

@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$', 'info.views.index'),
+    url(r'^$', 'info.views.index_personal'),
     url(r'^$', home, name='home'),
     url(r'^done/$', done, name='done'),
     url(r'^error/$', error, name='error'),

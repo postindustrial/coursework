@@ -46,6 +46,9 @@ class Student (AbstractUser):
     def is_authenticated(self):
         return True
 
+    def get_group_name(self):
+        return self.group
+
     def __unicode__(self):
         return self.last_name
 
