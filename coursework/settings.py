@@ -233,6 +233,8 @@ SOCIAL_AUTH_PIPELINE = (
     'info.pipeline.first_name',
 )
 
+AUTH_USER_MODEL = 'info.Student'
+
 try:
     from local_settings import *
 except:

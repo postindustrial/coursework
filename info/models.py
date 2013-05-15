@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 
 
 class CustomUserManager(models.Manager):
@@ -30,22 +30,18 @@ class Group (models.Model):
     def __unicode__(self):
         return self.name
 
-class Student (models.Model):
+class Student (AbstractUser):
 
     class Meta:
         verbose_name_plural = u'Студенты'
 
-    user = models.OneToOneField(User)
-    username = models.CharField(max_length=50)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_active = models.BooleanField()
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
     patronymic = models.CharField(max_length=20)
-    group = models.ForeignKey(Group)
+    group = models.CharField(max_length=7)
     invite_key = models.CharField(max_length=20)
+    #USERNAME_FIELD = 'username'
+    #REQUIRED_FIELDS = ['username']
 
-    objects = CustomUserManager()
+    #objects = CustomUserManager()
 
     def is_authenticated(self):
         return True
