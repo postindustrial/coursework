@@ -47,7 +47,7 @@ def index(request):
 def full_schedule(request):
     user_group = request.user.group
     user_id = request.user.email
-    context = {'schedule_full':Schedule.objects.all().filter(course__group__name=user_group).order_by('begin_time')}
+    context = {'schedule_full':Schedule.objects.all().filter(course__group__name=user_group).order_by('begin_time'), 'week_number': range(1, 3), 'day_number': range(0, 6)}
     return render(request, 'full.html', context)
 
 
