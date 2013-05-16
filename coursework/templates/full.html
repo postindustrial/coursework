@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    Расписание полностью: <br>
+    <ul>
+        {% for item in schedule_full %}
+            <h1>{{ item.weekday }}</h1>
+            <b> {{ item.course.name }} </b> <br>
+            <b> {{ item.course.teacher.last_name }} </b>
+            <br>
+            <div class="page-header">
+                {{ item.room }} <br>
+                {{ item.building.name }}
+            </div>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

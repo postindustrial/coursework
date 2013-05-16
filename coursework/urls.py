@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 
     url(r'^$', 'info.views.index'),
     url(r'^$', home, name='home'),
+    url(r'^full/$', 'info.views.full_schedule'),
     url(r'^done/$', done, name='done'),
     url(r'^error/$', error, name='error'),
     url(r'^logout/$', logout, name='logout'),

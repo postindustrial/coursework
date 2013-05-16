@@ -74,7 +74,7 @@
 
     <ul>
         {% for item in schedule_all %}
-            <h1>{{ item.day }}</h1>
+            <h1>{{ item.weekday }}</h1>
             <b> {{ item.course.name }} </b> <br>
             <b> {{ item.course.teacher.last_name }} </b>
             <br>
@@ -89,7 +89,8 @@
 
     <ul>
         {% for item in schedule_personal %}
-            <h1>{{ item.day }}</h1>
+            <h1>{{ item.weekday }}</h1>
+            <h1>{{ item.begin_time }}</h1>
             <b> {{ item.course.name }} </b> <br>
             <b> {{ item.course.teacher.last_name }} </b>
             <br>

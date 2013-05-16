@@ -4,6 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 from os.path import dirname, join
+import datetime
 
 PROJECT_ROOT = dirname(__file__)
 
@@ -234,6 +235,8 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 AUTH_USER_MODEL = 'info.Student'
+
+SEMESTER_BEGIN = datetime.datetime(2013, 2, 11)
 
 try:
     from local_settings import *

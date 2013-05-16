@@ -3,6 +3,45 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 
+WEEKDAYS = (
+    (0, u'Понедельник'),
+    (1, u'Вторник'),
+    (2, u'Среда'),
+    (3, u'Четверг'),
+    (4, u'Пятница'),
+    (5, u'Суббота'),
+    (6, u'Воскресенье'),
+)
+
+WEEKS = (
+    (1, u'Нечетная неделя'),
+    (2, u'Четная неделя'),
+)
+
+BEGIN_TIMES = (
+    (1, u'8:00'),
+    (2, u'9:45'),
+    (3, u'11:30'),
+    (4, u'13:35'),
+    (5, u'15:20'),
+    (6, u'17:05'),
+    (7, u'18:50'),
+)
+
+END_TIMES = (
+    (1, u'9:35'),
+    (2, u'11:20'),
+    (3, u'13:05'),
+    (4, u'15:10'),
+    (5, u'16:55'),
+    (6, u'18:40'),
+    (7, u'20:25'),
+)
+
+FINALS = (
+    (1, u'Зачет'),
+    (2, u'Экзамен'),
+)
 
 class CustomUserManager(models.Manager):
     def create_user(self, username, email):
@@ -52,16 +91,6 @@ class Student (AbstractUser):
     def __unicode__(self):
         return self.last_name
 
-class Classes (models.Model):
-
-    class Meta:
-        verbose_name_plural = u'Занятия'
-
-    begin_time = models.CharField(max_length=5)
-    end_time = models.CharField(max_length=5)
-
-    def __unicode__(self):
-        return self.begin_time
 
 class Building (models.Model):
 
@@ -85,15 +114,6 @@ class Teacher (models.Model):
     def __unicode__(self):
         return self.last_name + ' ' + self.initials
 
-class Final (models.Model):
-
-    class Meta:
-        verbose_name_plural = u'Завершение'
-
-    form = models.CharField(max_length=20)
-
-    def __unicode__(self):
-        return self.form
 
 class Course (models.Model):
 
@@ -106,7 +126,7 @@ class Course (models.Model):
         return self.name
 
 
-class Taught_Course (models.Model):
+class TaughtCourse (models.Model):
 
     class Meta:
         verbose_name_plural = u'Преподаваемые курсы'
@@ -115,43 +135,42 @@ class Taught_Course (models.Model):
     group = models.ForeignKey(Group)
     teacher = models.ForeignKey(Teacher)
     hours = models.IntegerField()
-    final = models.ForeignKey(Final)
+    final = models.IntegerField(verbose_name=u'Завершение', choices=FINALS)
 
     def __unicode__(self):
         return self.name.name + ' ' + self.teacher.last_name
 
-class Day (models.Model):
-    name = models.CharField(max_length=12)
-
-    class Meta:
-        verbose_name_plural = u'Дни недели'
-
-    def __unicode__(self):
-        return self.name
-
-class Week (models.Model):
-    name = models.CharField(max_length=14)
-
-    class Meta:
-        verbose_name_plural = u'Недели'
-
-    def __unicode__(self):
-        return self.name
 
 class Schedule (models.Model):
 
     class Meta:
         verbose_name_plural = u'Расписание'
 
-    week = models.ForeignKey(Week)
-    day = models.ForeignKey(Day)
-    time = models.ForeignKey(Classes)
-    course = models.ForeignKey(Taught_Course)
+    week = models.IntegerField(verbose_name=u'Неделя', choices=WEEKS)
+    weekday = models.IntegerField(verbose_name=u'День недели', choices=WEEKDAYS)
+    begin_time = models.IntegerField(verbose_name=u'Начало пары', choices=BEGIN_TIMES)
+    end_time = models.IntegerField(verbose_name=u'Окончание пары', choices=END_TIMES)
+    course = models.ForeignKey(TaughtCourse)
     room = models.CharField(max_length=10)
     building = models.ForeignKey(Building)
 
     def __unicode__(self):
-        return self.course.group.name + ' ' + self.week.name + ' ' + self.day.name + ' ' + self.course.name.name
+        return self.course.group.name + ' ' + str(self.week) + ' ' + str(self.weekday) + ' ' + self.course.name.name
+
+class Settings (models.Model):
+
+    class Meta:
+        verbose_name_plural = u'Настройки показа'
+
+    student = models.ForeignKey(Student)
+    schedule = models.ForeignKey(Schedule)
+
+    def __unicode__(self):
+        return self.student.last_name + ' ' + \
+               self.schedule.course.group.name + ' ' + \
+               self.schedule.week.name + ' ' + \
+               self.schedule.day.name + ' ' + \
+               self.schedule.course.name.name
 
 
 
