@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth import logout as auth_logout
@@ -14,6 +15,9 @@ from info.models import Student, Day, Week, Schedule, Group, Classes, Course, Ma
 from social_auth import __version__ as version
 from social_auth.utils import setting
 
+import datetime
+from dateutil.relativedelta import relativedelta
+
 
 def home(request):
     """Home view, displays login mechanism"""
@@ -23,11 +27,23 @@ def home(request):
         return render_to_response('frontpage.html', {'version': version},
                                   RequestContext(request))
 
+def get_current_week():
+    semester_begin = datetime.datetime(2013, 2, 11)
+    today = datetime.datetime.today()
+    rdelta = (today - semester_begin).days
+    current_week = 2 - (rdelta / 7) % 2 # семестр начался со второй недели
+    return current_week
+
 def index(request):
     if request.user.is_authenticated():
+        current_week = get_current_week()
+        current_weekday = datetime.datetime.today().isoweekday()
         user_group = request.user.group
-        context = {'schedule_personal': Schedule.objects.all().filter(course__group__name=user_group)}
-    return render(request, 'frontpage.html', context)
+        context = {'schedule_personal':Schedule.objects.all().filter(course__group__name=user_group).filter(day__pk__in=[current_weekday, current_weekday + 1]).filter(week=current_week)}
+        return render(request, 'frontpage.html', context)
+    else:
+        return render(request, 'frontpage.html')
+
 
 
 #@login_required
