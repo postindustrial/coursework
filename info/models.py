@@ -168,8 +168,8 @@ class Settings (models.Model):
     def __unicode__(self):
         return self.student.last_name + ' ' + \
                self.schedule.course.group.name + ' ' + \
-               self.schedule.week.name + ' ' + \
-               self.schedule.day.name + ' ' + \
+               str(self.schedule.week) + ' ' + \
+               str(self.schedule.weekday) + ' ' + \
                self.schedule.course.name.name
 
 

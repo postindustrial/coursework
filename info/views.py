@@ -11,7 +11,9 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.contrib.messages.api import get_messages
 from django.conf import settings
-from info.models import Schedule
+from django.http import QueryDict
+from django.db.models import Q
+from info.models import Schedule, Settings
 
 from social_auth import __version__ as version
 from social_auth.utils import setting
@@ -19,35 +21,47 @@ from social_auth.utils import setting
 import datetime
 from dateutil.relativedelta import relativedelta
 
-
-def home(request):
-    """Home view, displays login mechanism"""
-    if request.user.is_authenticated():
-        return HttpResponseRedirect('done')
-    else:
-        return render_to_response('frontpage.html', {'version': version},
-                                  RequestContext(request))
-
 def get_current_week():
     today = datetime.datetime.today()
     delta_days = (today - settings.SEMESTER_BEGIN).days
     current_week = 1 + (delta_days / 7) % 2 # семестр начался со второй недели
     return current_week
 
-def index(request):
+def frontpage(request):
+    if request.user.is_authenticated():
+        return redirect('info.views.home')
+    else:
+        return render(request, 'frontpage.html')
+
+def home(request):
     if request.user.is_authenticated():
         current_week = get_current_week()
         current_weekday = datetime.datetime.today().weekday()
         user_group = request.user.group
-        context = {'schedule_personal': Schedule.objects.all().filter(course__group__name=user_group).filter(weekday__in=[current_weekday, current_weekday + 1]).filter(week=current_week).order_by('begin_time')}
-        return render(request, 'frontpage.html', context)
+        personal_schedule = Schedule.objects.all().filter(course__group__name=user_group).filter(weekday__in=[current_weekday, current_weekday + 1]).filter(week=current_week).order_by('begin_time')
+        personal_schedule = personal_schedule.filter(~Q(pk__in=Settings.objects.filter(schedule__course__group__name=user_group)))
+        context = {'personal_schedule_current': personal_schedule}
+        return render(request, 'home.html', context)
     else:
         return render(request, 'frontpage.html')
 
-def full_schedule(request):
+def full_schedule(request, group_number="356"):
+    group_list = Group.objects.all()
+    context = {'group_list': group_list}
+    return render(request, 'schedule.html', context)
+
+def full_personal_schedule(request):
+    if request.method == 'POST':
+        user_group = request.user.group
+        Settings.objects.filter(student__group=user_group).delete()
+        personal_settings = request.POST.getlist('settings')
+        for item in personal_settings:
+            schedule_item=Schedule.objects.get(pk=int(item))
+            new_settings = Settings(student=request.user, schedule=schedule_item)
+            new_settings.save()
     user_group = request.user.group
-    user_id = request.user.email
-    context = {'schedule_full':Schedule.objects.all().filter(course__group__name=user_group).order_by('begin_time'), 'week_number': range(1, 3), 'day_number': range(0, 6)}
+    personal_schedule = Schedule.objects.all().filter(course__group__name=user_group).order_by('begin_time')
+    context = {'personal_schedule_full': personal_schedule, 'week_number': range(1, 3), 'day_number': range(0, 6)}
     return render(request, 'full.html', context)
 
 
