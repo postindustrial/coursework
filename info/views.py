@@ -19,7 +19,6 @@ from social_auth import __version__ as version
 from social_auth.utils import setting
 
 import datetime
-from dateutil.relativedelta import relativedelta
 
 def get_current_week():
     today = datetime.datetime.today()
@@ -99,8 +98,8 @@ def form(request):
 
 
 def form2(request):
-    if request.method == 'POST' and request.POST.get('first_name'):
-        request.session['saved_first_name'] = request.POST['first_name']
+    if request.method == 'POST' and request.POST.get('group'):
+        request.session['saved_group'] = request.POST['group']
         name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
         backend = request.session[name]['backend']
         return redirect('socialauth_complete', backend=backend)

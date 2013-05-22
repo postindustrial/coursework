@@ -231,7 +231,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details',
     'social_auth.backends.pipeline.misc.save_status_to_session',
     'info.pipeline.redirect_to_form2',
-    'info.pipeline.first_name',
+    'info.pipeline.group',
 )
 
 AUTH_USER_MODEL = 'info.Student'

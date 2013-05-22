@@ -16,12 +16,13 @@ def username(request, *args, **kwargs):
 
 
 def redirect_to_form2(*args, **kwargs):
-    if not kwargs['request'].session.get('saved_first_name'):
+    user = kwargs['user']
+    if (not user.group) and (not kwargs['request'].session.get('saved_group')):
         return HttpResponseRedirect('/form2/')
 
 
-def first_name(request, *args, **kwargs):
-    if 'saved_first_name' in request.session:
+def group(request, *args, **kwargs):
+    if 'saved_group' in request.session:
         user = kwargs['user']
-        user.group = request.session.get('saved_first_name')
+        user.group = request.session.get('saved_group')
         user.save()
