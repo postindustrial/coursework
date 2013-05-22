@@ -24,7 +24,10 @@
     <body>
 
         <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
+        <div class="container-fluid"></div>
 
+        <div class="row-fluid">
+        <div class="span12">
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -37,23 +40,26 @@
                 </div>
             </div>
         </div>
+        </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span1">
+
+            </div>
+            <div class="span2">
+                {% include "hello.html" %}
+            </div>
+            <div class="span9" id="content">
+            {% block content %}
+            {% endblock %}
+            </div>
+        </div>
+
+        </div>
 
         {% block heading %}{% endblock %}
 
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-        <div class="container">
-            {% block content %}{% endblock %}
-            <footer>
-                <p>&copy; Umbrella Co. 2012</p>
-            </footer>
-        </div> <!-- /container -->
 
         {% block bottomjs %}
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
@@ -63,5 +69,6 @@
 
         <script src="{{ STATIC_URL }}js/main.js"></script>
         {% endblock %}
+
     </body>
 </html>
