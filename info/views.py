@@ -13,7 +13,7 @@ from django.contrib.messages.api import get_messages
 from django.conf import settings
 from django.http import QueryDict
 from django.db.models import Q
-from info.models import Schedule, Settings
+from info.models import Schedule, Settings, Group
 
 from social_auth import __version__ as version
 from social_auth.utils import setting
@@ -44,10 +44,14 @@ def home(request):
     else:
         return render(request, 'frontpage.html')
 
-def full_schedule(request, group_number="356"):
+def selected_schedule(request):
     group_list = Group.objects.all()
-    context = {'group_list': group_list}
-    return render(request, 'schedule.html', context)
+    if request.method == 'POST':
+        selected_group = request.POST['group']
+        selected_schedule = Schedule.objects.all().filter(course__group__name=selected_group).order_by('begin_time')
+        context = {'groups': group_list, 'selected_schedule': selected_schedule}
+        return render(request, 'schedule.html', context)
+    return render(request, 'schedule.html', {'groups': group_list})
 
 def full_personal_schedule(request):
     if request.method == 'POST':
@@ -98,12 +102,13 @@ def form(request):
 
 
 def form2(request):
+    context = Group.objects.all()
     if request.method == 'POST' and request.POST.get('group'):
         request.session['saved_group'] = request.POST['group']
         name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
         backend = request.session[name]['backend']
         return redirect('socialauth_complete', backend=backend)
-    return render_to_response('form2.html', {}, RequestContext(request))
+    return render_to_response('form2.html', {}, RequestContext(request, {'groups': context}))
 
 
 def close_login_popup(request):

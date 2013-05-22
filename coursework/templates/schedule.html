@@ -1,9 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+
+Выберите номер группы:
+<form action="" method="post">
+    {% csrf_token %}
+    <p>
+        <label for="id_group">Group:</label>
+        <select id="id_group" name="group">
+            {% for item in groups %}
+                <option>{{ item.name }}</option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <input type="submit" value="Показать" />
+</form>
+
+Расписание для выбранной группы:
+
+<ul>
+    {% for item in selected_schedule %}
+        <h1>{{ item.weekday }}</h1>
+        <b> {{ item.course.name }} </b> <br>
+        <b> {{ item.course.teacher.last_name }} </b>
+        <br>
+        <div class="page-header">
+            {{ item.room }} <br>
+            {{ item.building.name }}
+        </div>
+    {% endfor %}
+</ul>
+
+{% endblock %}

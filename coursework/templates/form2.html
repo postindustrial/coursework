@@ -3,13 +3,19 @@
 {% block heading %}User basic form2{% endblock %}
 
 {% block content %}
+
 <form action="" method="post">
     {% csrf_token %}
     <p>
         <label for="id_group">Group:</label>
-        <input type="text" name="group" id="id_group" value="" />
+        <select id="id_group" name="group">
+            {% for item in groups %}
+                <option>{{ item.name }}</option>
+            {% endfor %}
+        </select>
     </p>
 
     <input type="submit" value="Send" />
 </form>
+
 {% endblock %}
