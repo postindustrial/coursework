@@ -4,18 +4,52 @@
 
 Личное расписание для группы {{ user.group }}: <br>
 
-<ul>
-    {% for item in schedule_personal %}
-        <h1>{{ item.weekday }}</h1>
-        <h1>{{ item.begin_time }}</h1>
-        <b> {{ item.course.name }} </b> <br>
-        <b> {{ item.course.teacher.last_name }} </b>
-        <br>
-        <div class="page-header">
-            {{ item.room }} <br>
-            {{ item.building.name }}
-        </div>
-    {% endfor %}
-</ul>
+<h6>Сегодня:</h6>
+<table class="table table-striped table-bordered" >
+{% for item in personal_schedule_current %}
+    {% if item.weekday == today %}
+        <tr>
+            <td style="width: 8%">
+                {{ item.get_begin_time_display }}
+            </td>
+            <td style="width: 42%">
+                {{ item.course.name.name }}
+            </td>
+            <td style="width: 37%">
+                {{ item.course.teacher.last_name }} {{ item.course.teacher.initials }}
+            </td>
+            <td style="width: 13%">
+                {{ item.room }} / {{ item.building.name }}
+            </td>
+        </tr>
+    {% endif %}
+{% empty %}
+    Занятий нет! <br>
+{% endfor %}
+</table>
+
+<h6>Завтра:</h6>
+    <table class="table table-striped table-bordered" >
+        {% for item in personal_schedule_current %}
+            {% if item.weekday == tomorrow %}
+                <tr>
+                    <td style="width: 8%">
+                        {{ item.get_begin_time_display }}
+                    </td>
+                    <td style="width: 42%">
+                        {{ item.course.name.name }}
+                    </td>
+                    <td style="width: 37%">
+                        {{ item.course.teacher.last_name }} {{ item.course.teacher.initials }}
+                    </td>
+                    <td style="width: 13%">
+                        {{ item.room }} / {{ item.building.name }}
+                    </td>
+                </tr>
+            {% endif %}
+        {% empty %}
+            Занятий нет! <br>
+        {% endfor %}
+    </table>
 
 {% endblock %}

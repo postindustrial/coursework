@@ -2,6 +2,8 @@
 
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
+from django.conf import settings
+import datetime
 
 WEEKDAYS = (
     (0, u'Понедельник'),
@@ -42,6 +44,21 @@ FINALS = (
     (1, u'Зачет'),
     (2, u'Экзамен'),
 )
+
+def weekday_processor(request):
+    return ({'week_days': WEEKDAYS})
+
+def datetime_processor(request):
+    today = datetime.datetime.today()
+    delta_days = (today - settings.SEMESTER_BEGIN).days
+    current_week = 1 + (delta_days / 7) % 2
+    context = {
+        'today': datetime.datetime.today().weekday(),
+        'tomorrow': (today.weekday() + 1) % 6,
+        'current_week': current_week,
+        'current_date': datetime.datetime.today(),
+    }
+    return (context)
 
 class CustomUserManager(models.Manager):
     def create_user(self, username, email):

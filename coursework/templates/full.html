@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
+{% block settings %}
+    <p class="text-center">
+        Отметьте пары, которые не нужно посещать!
+        Они будут исключены из ежедневного показа.
+    </p>
+{% endblock %}
+
 {% block content %}
 
     <style>
@@ -10,8 +17,10 @@
     <form method="post">
         {% csrf_token %}
         <fieldset>
-        <legend>Полное расписание</legend>
-        <button type="submit" class="btn">Обновить настройки</button>
+        <legend>
+            Полное расписание
+            <button type="submit" class="btn">Обновить настройки</button>
+        </legend>
         <ul>
         {% for week_n in week_number %}
             {% if week_n == 1 %}
@@ -19,11 +28,11 @@
             {% else %}
                 <h4>Вторая учебная неделя</h4> <br>
             {% endif %}
-            {% for day_n in day_number %}
-                {{ day_n }}
+            {% for day_number, day_name in week_days %}
+                <strong>{{ day_name }}</strong>
                 <table class="table table-striped table-bordered">
                 {% for item in personal_schedule_full %}
-                    {% if item.week == week_n and item.weekday == day_n %}
+                    {% if item.week == week_n and item.weekday == day_number %}
                         <tr>
                             <td style="width: 4%">
                                 <input type="checkbox" value="{{ item.pk }}" name="settings">

@@ -1,14 +1,22 @@
 
 
 {% block content %}
-    {% if user.group %}
-        Привет, {{ user.first_name }}! <br>
-        <a rel="nofollow" class="logout" href="/logout/">Выйти</a> <br>
-    {% else %}
-        Привет, гость! <br>
-        <a rel="nofollow" href="{% url "socialauth_begin" "google" %}">Войти через Google</a> <br>
-    {% endif %}
-    <br>
-    Сегодня такая-то дата! <br>
-    Такая-то учебная неделя! <br>
+    <p class="text-center">
+        {% if user.group %}
+            Привет, {{ user.first_name }}! <br>
+            <a rel="nofollow" class="logout" href="/logout/">Выход</a> <br>
+        {% else %}
+            Привет, гость! <br>
+            <a rel="nofollow" href="{% url "socialauth_begin" "google" %}">Вход через Google</a> <br>
+        {% endif %}
+        <br>
+        Сегодня: <br><br>
+        {{ current_date }} <br>
+        {% if current_week == 1 %}
+            Первая учебная неделя! <br>
+        {% else %}
+            Вторая учебная неделя! <br>
+        {% endif %}
+    </p>
+
 {% endblock %}

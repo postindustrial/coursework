@@ -4,16 +4,15 @@
 
 <form action="" method="post">
     {% csrf_token %}
-    <p>
+    <p class="text-center">
         <label for="id_group">Выберите номер группы:</label>
         <select id="id_group" name="group" style="width: 180px">
             {% for item in groups %}
                 <option>{{ item.name }}</option>
             {% endfor %}
         </select>
+        <button class="btn" type="submit">Показать</button>
     </p>
-
-    <input type="submit" value="Показать" />
 </form>
 
 {% endblock %}
@@ -33,11 +32,11 @@
         {% else %}
             <h4>Вторая учебная неделя</h4> <br>
         {% endif %}
-        {% for day_n in day_number %}
-            {{ day_n }}
+        {% for day_number, day_name in week_days %}
+            <strong>{{ day_name }}</strong>
             <table class="table table-striped table-bordered" >
                 {% for item in selected_schedule %}
-                    {% if item.week == week_n and item.weekday == day_n %}
+                    {% if item.week == week_n and item.weekday == day_number %}
                         <tr>
                             <td style="width: 8%">
                                 {{ item.get_begin_time_display }}

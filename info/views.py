@@ -21,7 +21,6 @@ from social_auth.utils import setting
 
 import datetime
 
-
 def get_current_week():
     today = datetime.datetime.today()
     delta_days = (today - settings.SEMESTER_BEGIN).days
@@ -58,14 +57,13 @@ def home(request):
         return render(request, 'frontpage.html')
 
 def selected_schedule(request):
-    days = SortedDict({u'Понедельник':0, u'Вторник':1, u'Среда':2, u'Четверг':3, u'Пятница':4, u'Суббота':5})
     group_list = Group.objects.all()
     if request.method == 'POST':
         selected_group = request.POST['group']
         selected_schedule = Schedule.objects.all().filter(course__group__name=selected_group).order_by('begin_time')
-        context = {'groups': group_list, 'selected_schedule': selected_schedule, 'week_number': range(1, 3), 'day_number': days}
+        context = {'groups': group_list, 'selected_schedule': selected_schedule, 'week_number': range(1, 3)}
         return render(request, 'schedule.html', context)
-    return render(request, 'schedule.html', {'groups': group_list, 'week_number': range(1, 3), 'day_number': days})
+    return render(request, 'schedule.html', {'groups': group_list, 'week_number': range(1, 3)})
 
 def full_personal_schedule(request):
     if request.method == 'POST':
@@ -76,10 +74,9 @@ def full_personal_schedule(request):
             schedule_item=Schedule.objects.get(pk=int(item))
             new_settings = Settings(student=request.user, schedule=schedule_item)
             new_settings.save()
-    days = SortedDict({u'Понедельник':0, u'Вторник':1, u'Среда':2, u'Четверг':3, u'Пятница':4, u'Суббота':5})
     user_group = request.user.group
     personal_schedule = Schedule.objects.all().filter(course__group__name=user_group).order_by('begin_time')
-    context = {'personal_schedule_full': personal_schedule, 'week_number': range(1, 3), 'day_number': days}
+    context = {'personal_schedule_full': personal_schedule, 'week_number': range(1, 3)}
     return render(request, 'full.html', context)
 
 

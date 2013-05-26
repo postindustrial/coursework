@@ -215,6 +215,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.contrib.messages.context_processors.messages',
     'social_auth.context_processors.social_auth_by_type_backends',
+    'info.models.weekday_processor',
+    'info.models.datetime_processor',
 )
 
 LOGIN_REDIRECT_URL = '/'
