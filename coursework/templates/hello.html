@@ -1,6 +1,14 @@
+
+
 {% block content %}
-    Привет, такой-то пользователь! <br>
+    {% if user.group %}
+        Привет, {{ user.first_name }}! <br>
+        <a rel="nofollow" class="logout" href="/logout/">Выйти</a> <br>
+    {% else %}
+        Привет, гость! <br>
+        <a rel="nofollow" href="{% url "socialauth_begin" "google" %}">Войти через Google</a> <br>
+    {% endif %}
+    <br>
     Сегодня такая-то дата! <br>
     Такая-то учебная неделя! <br>
-    А здесь можно выйти из системы! <br>
 {% endblock %}

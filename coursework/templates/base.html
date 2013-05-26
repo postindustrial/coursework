@@ -49,10 +49,14 @@
             </div>
             <div class="span2">
                 {% include "hello.html" %}
+                {% block settings %}
+                {% endblock %}
             </div>
-            <div class="span9" id="content">
+            <div class="span6" id="content">
             {% block content %}
             {% endblock %}
+            </div>
+            <div class="span3">
             </div>
         </div>
 

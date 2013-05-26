@@ -52,8 +52,8 @@ class Major (models.Model):
     class Meta:
         verbose_name_plural = u'Специальности'
 
-    name = models.CharField(max_length=100)
-    code = models.CharField(max_length=10)
+    name = models.CharField(verbose_name=u'Название специальности', max_length=100)
+    code = models.CharField(verbose_name=u'Код специальности', max_length=10)
 
     def __unicode__(self):
         return self.name
@@ -63,7 +63,7 @@ class Group (models.Model):
     class Meta:
         verbose_name_plural = u'Группы'
 
-    name = models.CharField(max_length=7)
+    name = models.CharField(verbose_name=u'Название группы', max_length=7)
     major = models.ForeignKey(Major)
 
     def __unicode__(self):
@@ -74,9 +74,8 @@ class Student (AbstractUser):
     class Meta:
         verbose_name_plural = u'Студенты'
 
-    patronymic = models.CharField(max_length=20)
-    group = models.CharField(max_length=7)
-    invite_key = models.CharField(max_length=20)
+    patronymic = models.CharField(verbose_name=u'Отчество', max_length=20)
+    group = models.CharField(verbose_name=u'Название группы', max_length=7)
     #USERNAME_FIELD = 'username'
     #REQUIRED_FIELDS = ['username']
 
@@ -97,7 +96,7 @@ class Building (models.Model):
     class Meta:
         verbose_name_plural = u'Строения'
 
-    name = models.CharField(max_length=4)
+    name = models.CharField(verbose_name=u'Название корпуса', max_length=4)
 
     def __unicode__(self):
         return self.name
@@ -107,9 +106,10 @@ class Teacher (models.Model):
     class Meta:
         verbose_name_plural = u'Преподаватели'
 
-    last_name = models.CharField(max_length=25)
-    initials = models.CharField(max_length=4)
-    full_name = models.CharField(max_length=50)
+    last_name = models.CharField(verbose_name=u'Фамилия', max_length=25)
+    initials = models.CharField(verbose_name=u'Инициалы', max_length=4)
+    full_name = models.CharField(verbose_name=u'Имя и отчество', max_length=50)
+    post = models.CharField(verbose_name=u'Должность', max_length=100)
 
     def __unicode__(self):
         return self.last_name + ' ' + self.initials
@@ -120,7 +120,7 @@ class Course (models.Model):
     class Meta:
         verbose_name_plural = u'Дисциплины'
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(verbose_name=u'Название дисциплины', max_length=100)
 
     def __unicode__(self):
         return self.name
@@ -134,7 +134,7 @@ class TaughtCourse (models.Model):
     name = models.ForeignKey(Course)
     group = models.ForeignKey(Group)
     teacher = models.ForeignKey(Teacher)
-    hours = models.IntegerField()
+    hours = models.IntegerField(verbose_name=u'Количество часов')
     final = models.IntegerField(verbose_name=u'Завершение', choices=FINALS)
 
     def __unicode__(self):
@@ -151,7 +151,7 @@ class Schedule (models.Model):
     begin_time = models.IntegerField(verbose_name=u'Начало пары', choices=BEGIN_TIMES)
     end_time = models.IntegerField(verbose_name=u'Окончание пары', choices=END_TIMES)
     course = models.ForeignKey(TaughtCourse)
-    room = models.CharField(max_length=10)
+    room = models.CharField(verbose_name=u'Аудитория', max_length=10)
     building = models.ForeignKey(Building)
 
     def __unicode__(self):

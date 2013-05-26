@@ -6,26 +6,43 @@
         {% csrf_token %}
         <fieldset>
         <legend>Полное расписание</legend>
-
+        <button type="submit" class="btn">Обновить настройки</button>
         <ul>
         {% for week_n in week_number %}
+            {% if week_n == 1 %}
+                Первая учебная неделя <br>
+            {% else %}
+                Вторая учебная неделя <br>
+            {% endif %}
             {% for day_n in day_number %}
+                {{ day_n }}
+                <table class="table table-striped">
                 {% for item in personal_schedule_full %}
                     {% if item.week == week_n and item.weekday == day_n %}
-                        <input type="checkbox" value="{{ item.pk }}" name="settings">
-                        <h1>{{ item.weekday }}</h1>
-                        <b> {{ item.course.name }} </b> <br>
-                        <b> {{ item.course.teacher.last_name }} </b>
-                        <br>
-                        <div class="page-header">
-                            {{ item.room }} <br>
-                            {{ item.building.name }}
-                        </div>
+                        <tr>
+                            <td>
+                                <input type="checkbox" value="{{ item.pk }}" name="settings">
+                            </td>
+                            <td>
+                                {{ item.get_begin_time_display }}
+                            </td>
+                            <td>
+                                {{ item.course.name.name }}
+                            </td>
+                            <td>
+                                {{ item.course.teacher.last_name }} {{ item.course.teacher.initials }}
+                            </td>
+                            <td>
+                                {{ item.room }} / {{ item.building.name }}
+                            </td>
+                        </tr>
                     {% endif %}
+                {% empty %}
+                    Занятий нет! <br>
                 {% endfor %}
+                </table>
             {% endfor %}
         {% endfor %}
-        <button type="submit" class="btn">Сохранить</button>
         </ul>
         </fieldset>
     </form>

@@ -36,9 +36,20 @@ def home(request):
     if request.user.is_authenticated():
         current_week = get_current_week()
         current_weekday = datetime.datetime.today().weekday()
-        user_group = request.user.group
-        personal_schedule = Schedule.objects.all().filter(course__group__name=user_group).filter(weekday__in=[current_weekday, current_weekday + 1]).filter(week=current_week).order_by('begin_time')
-        personal_schedule = personal_schedule.filter(~Q(pk__in=Settings.objects.filter(schedule__course__group__name=user_group)))
+        user = request.user
+        user_group = user.group
+        temp = Settings.objects.filter(student__email=user.email)
+        personal_schedule = Schedule.objects.all().\
+            filter(course__group__name=user_group).\
+            order_by('begin_time')#.exclude(pk__in=temp)
+        for element in temp.all():
+            personal_schedule = personal_schedule.exclude(pk=element.schedule_id)
+        if current_weekday == 6:# воскресенье
+            personal_schedule = personal_schedule.filter(weekday=0). \
+                filter(week=3-current_week)
+        else:
+            personal_schedule = personal_schedule.filter(weekday__in=[current_weekday, current_weekday + 1]). \
+                filter(week=current_week)
         context = {'personal_schedule_current': personal_schedule}
         return render(request, 'home.html', context)
     else:
