@@ -338,6 +338,7 @@ a:focus {
 
 .span1 {
   width: 60px;
+  margin-left: 40px;
 }
 
 .offset12 {

@@ -10,6 +10,9 @@
         {% block css %}
         <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css">
         <style>
+            .my_content {
+                border-left: 1px dashed #333;
+            }
             body {
                 padding-top: 60px;
                 padding-bottom: 40px;
@@ -33,9 +36,9 @@
                 <div class="container">
                     <a class="brand" href="/">Расписание ВМИ</a>
                         <ul class="nav">
-                            <li class="active"><a href="/home">Home</a></li>
-                            <li><a href="/full">Full</a></li>
-                            <li><a href="/schedule">Schedule</a></li>
+                            <li><a href="/home">Свежее</a></li>
+                            <li><a href="/full">Полное</a></li>
+                            <li><a href="/schedule">Группы</a></li>
                         </ul>
                 </div>
             </div>
@@ -44,19 +47,16 @@
         </div>
 
         <div class="row-fluid">
-            <div class="span1">
-
+            <div class="span2 offset1">
+                    {% include "hello.html" %}
+                    {% block settings %}
+                    {% endblock %}
             </div>
-            <div class="span2">
-                {% include "hello.html" %}
-                {% block settings %}
+            <div class="span7" id="content">
+                {% block content %}
                 {% endblock %}
             </div>
-            <div class="span6" id="content">
-            {% block content %}
-            {% endblock %}
-            </div>
-            <div class="span3">
+            <div class="span2">
             </div>
         </div>
 

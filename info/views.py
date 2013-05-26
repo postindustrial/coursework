@@ -12,6 +12,7 @@ from django.shortcuts import render_to_response, redirect
 from django.contrib.messages.api import get_messages
 from django.conf import settings
 from django.http import QueryDict
+from django.utils.datastructures import SortedDict
 from django.db.models import Q
 from info.models import Schedule, Settings, Group
 
@@ -19,6 +20,7 @@ from social_auth import __version__ as version
 from social_auth.utils import setting
 
 import datetime
+
 
 def get_current_week():
     today = datetime.datetime.today()
@@ -56,13 +58,14 @@ def home(request):
         return render(request, 'frontpage.html')
 
 def selected_schedule(request):
+    days = SortedDict({u'Понедельник':0, u'Вторник':1, u'Среда':2, u'Четверг':3, u'Пятница':4, u'Суббота':5})
     group_list = Group.objects.all()
     if request.method == 'POST':
         selected_group = request.POST['group']
         selected_schedule = Schedule.objects.all().filter(course__group__name=selected_group).order_by('begin_time')
-        context = {'groups': group_list, 'selected_schedule': selected_schedule}
+        context = {'groups': group_list, 'selected_schedule': selected_schedule, 'week_number': range(1, 3), 'day_number': days}
         return render(request, 'schedule.html', context)
-    return render(request, 'schedule.html', {'groups': group_list})
+    return render(request, 'schedule.html', {'groups': group_list, 'week_number': range(1, 3), 'day_number': days})
 
 def full_personal_schedule(request):
     if request.method == 'POST':
@@ -73,9 +76,10 @@ def full_personal_schedule(request):
             schedule_item=Schedule.objects.get(pk=int(item))
             new_settings = Settings(student=request.user, schedule=schedule_item)
             new_settings.save()
+    days = SortedDict({u'Понедельник':0, u'Вторник':1, u'Среда':2, u'Четверг':3, u'Пятница':4, u'Суббота':5})
     user_group = request.user.group
     personal_schedule = Schedule.objects.all().filter(course__group__name=user_group).order_by('begin_time')
-    context = {'personal_schedule_full': personal_schedule, 'week_number': range(1, 3), 'day_number': range(0, 6)}
+    context = {'personal_schedule_full': personal_schedule, 'week_number': range(1, 3), 'day_number': days}
     return render(request, 'full.html', context)
 
 

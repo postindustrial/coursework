@@ -2,6 +2,11 @@
 
 {% block content %}
 
+    <style>
+        table { table-layout: fixed; }
+        table th, table td { overflow: hidden; }
+    </style>
+
     <form method="post">
         {% csrf_token %}
         <fieldset>
@@ -10,29 +15,29 @@
         <ul>
         {% for week_n in week_number %}
             {% if week_n == 1 %}
-                Первая учебная неделя <br>
+                <h4>Первая учебная неделя</h4> <br>
             {% else %}
-                Вторая учебная неделя <br>
+                <h4>Вторая учебная неделя</h4> <br>
             {% endif %}
             {% for day_n in day_number %}
                 {{ day_n }}
-                <table class="table table-striped">
+                <table class="table table-striped table-bordered">
                 {% for item in personal_schedule_full %}
                     {% if item.week == week_n and item.weekday == day_n %}
                         <tr>
-                            <td>
+                            <td style="width: 4%">
                                 <input type="checkbox" value="{{ item.pk }}" name="settings">
                             </td>
-                            <td>
+                            <td style="width: 8%">
                                 {{ item.get_begin_time_display }}
                             </td>
-                            <td>
+                            <td style="width: 40%">
                                 {{ item.course.name.name }}
                             </td>
-                            <td>
+                            <td style="width: 35%">
                                 {{ item.course.teacher.last_name }} {{ item.course.teacher.initials }}
                             </td>
-                            <td>
+                            <td style="width: 13%">
                                 {{ item.room }} / {{ item.building.name }}
                             </td>
                         </tr>
