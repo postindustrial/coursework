@@ -54,7 +54,7 @@ def home(request):
         context = {'personal_schedule_current': personal_schedule}
         return render(request, 'home.html', context)
     else:
-        return render(request, 'frontpage.html')
+        return redirect('info.views.selected_schedule')
 
 def selected_schedule(request):
     context = {}
@@ -64,8 +64,9 @@ def selected_schedule(request):
         selected_group = request.POST['group']
         selected_schedule = Schedule.objects.all().filter(course__group__name=selected_group).order_by('begin_time')
     else:
-        selected_schedule = Schedule.objects.all().filter(course__group__name=Group.objects.get().name).order_by('begin_time')
-    context = {'groups': group_list, 'selected_schedule': selected_schedule, 'week_number': range(1, 3)}
+        selected_group = Group.objects.get().name
+        selected_schedule = Schedule.objects.all().filter(course__group__name=selected_group).order_by('begin_time')
+    context = {'groups': group_list, 'selected_group': selected_group, 'selected_schedule': selected_schedule, 'week_number': range(1, 3)}
     return render(request, 'schedule.html', context)
 
 def full_personal_schedule(request):
