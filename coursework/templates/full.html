@@ -18,8 +18,8 @@
         {% csrf_token %}
         <fieldset>
         <legend>
-            Полное расписание
-            <button type="submit" class="btn">Обновить настройки</button>
+            <strong>Ваше полное расписание</strong>
+            <button type="submit" class="btn pull-right">Обновить настройки</button>
         </legend>
         <ul>
         {% for week_n in week_number %}

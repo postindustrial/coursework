@@ -31,7 +31,7 @@ def frontpage(request):
     if request.user.is_authenticated():
         return redirect('info.views.home')
     else:
-        return render(request, 'frontpage.html')
+        return redirect('info.views.selected_schedule')
 
 def home(request):
     if request.user.is_authenticated():
@@ -57,27 +57,33 @@ def home(request):
         return render(request, 'frontpage.html')
 
 def selected_schedule(request):
+    context = {}
+    selected_schedule = {}
     group_list = Group.objects.all()
     if request.method == 'POST':
         selected_group = request.POST['group']
         selected_schedule = Schedule.objects.all().filter(course__group__name=selected_group).order_by('begin_time')
-        context = {'groups': group_list, 'selected_schedule': selected_schedule, 'week_number': range(1, 3)}
-        return render(request, 'schedule.html', context)
-    return render(request, 'schedule.html', {'groups': group_list, 'week_number': range(1, 3)})
+    else:
+        selected_schedule = Schedule.objects.all().filter(course__group__name=Group.objects.get().name).order_by('begin_time')
+    context = {'groups': group_list, 'selected_schedule': selected_schedule, 'week_number': range(1, 3)}
+    return render(request, 'schedule.html', context)
 
 def full_personal_schedule(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            user_group = request.user.group
+            Settings.objects.filter(student__group=user_group).delete()
+            personal_settings = request.POST.getlist('settings')
+            for item in personal_settings:
+                schedule_item=Schedule.objects.get(pk=int(item))
+                new_settings = Settings(student=request.user, schedule=schedule_item)
+                new_settings.save()
         user_group = request.user.group
-        Settings.objects.filter(student__group=user_group).delete()
-        personal_settings = request.POST.getlist('settings')
-        for item in personal_settings:
-            schedule_item=Schedule.objects.get(pk=int(item))
-            new_settings = Settings(student=request.user, schedule=schedule_item)
-            new_settings.save()
-    user_group = request.user.group
-    personal_schedule = Schedule.objects.all().filter(course__group__name=user_group).order_by('begin_time')
-    context = {'personal_schedule_full': personal_schedule, 'week_number': range(1, 3)}
-    return render(request, 'full.html', context)
+        personal_schedule = Schedule.objects.all().filter(course__group__name=user_group).order_by('begin_time')
+        context = {'personal_schedule_full': personal_schedule, 'week_number': range(1, 3)}
+        return render(request, 'full.html', context)
+    else:
+        return redirect('info.views.selected_schedule')
 
 
 @login_required

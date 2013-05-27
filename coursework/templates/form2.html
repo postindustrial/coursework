@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
-{% block heading %}User basic form2{% endblock %}
+{% block heading %}
+
+{% endblock %}
 
 {% block content %}
 
 <form action="" method="post">
     {% csrf_token %}
     <p>
-        <label for="id_group">Group:</label>
+        <label for="id_group">Выберите свою группу:</label>
         <select id="id_group" name="group">
             {% for item in groups %}
                 <option>{{ item.name }}</option>
