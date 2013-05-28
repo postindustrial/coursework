@@ -24,7 +24,7 @@ import datetime
 def get_current_week():
     today = datetime.datetime.today()
     delta_days = (today - settings.SEMESTER_BEGIN).days
-    current_week = 1 + (delta_days / 7) % 2 # семестр начался со второй недели
+    current_week = 2 - (delta_days / 7) % 2 # семестр начался со второй недели
     return current_week
 
 def frontpage(request):

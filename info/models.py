@@ -21,8 +21,8 @@ WEEKS = (
 )
 
 BEGIN_TIMES = (
-    (1, u'8:00'),
-    (2, u'9:45'),
+    (1, u'08:00'),
+    (2, u'09:45'),
     (3, u'11:30'),
     (4, u'13:35'),
     (5, u'15:20'),
@@ -31,7 +31,7 @@ BEGIN_TIMES = (
 )
 
 END_TIMES = (
-    (1, u'9:35'),
+    (1, u'09:35'),
     (2, u'11:20'),
     (3, u'13:05'),
     (4, u'15:10'),
@@ -51,7 +51,7 @@ def weekday_processor(request):
 def datetime_processor(request):
     today = datetime.datetime.today()
     delta_days = (today - settings.SEMESTER_BEGIN).days
-    current_week = 1 + (delta_days / 7) % 2
+    current_week = 2 - (delta_days / 7) % 2
     context = {
         'today': datetime.datetime.today().weekday(),
         'tomorrow': (today.weekday() + 1) % 6,

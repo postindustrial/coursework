@@ -1,22 +1,52 @@
 
 
-{% block content %}
-    <p class="text-center">
-        {% if user.group %}
-            Привет, {{ user.first_name }}! <br>
-            <a rel="nofollow" class="logout" href="/logout/">Выход</a> <br>
-        {% else %}
-            Привет, гость! <br>
-            <a rel="nofollow" href="{% url "socialauth_begin" "google" %}">Вход через Google</a> <br>
-        {% endif %}
-        <br>
-        Сегодня: <br><br>
-        {{ current_date }} <br>
-        {% if current_week == 1 %}
-            Первая учебная неделя <br>
-        {% else %}
-            Вторая учебная неделя <br>
-        {% endif %}
-    </p>
+<ul class="nav nav-tabs nav-pills nav-stacked">
+    {% if user.group %}
+    <li class=active>
+        <a href="/home">Свежее</a>
+    </li>
+    <li>
+        <a href="/full">Полное</a>
+    </li>
+    <li>
+        <a href="/schedule">Группы</a>
+    </li>
+    {% else %}
+        <li>
+            <a href="/schedule">Расписание групп</a>
+        </li>
+    {% endif %}
+</ul>
 
-{% endblock %}
+<ul class="nav nav-tabs nav-pills nav-stacked">
+    {% if user.group %}
+        <li>
+            <a rel="nofollow" class="logout" href="/logout/">Выход</a> <br>
+        </li>
+    {% else %}
+        <li>
+            <a rel="nofollow" href="{% url "socialauth_begin" "google" %}">Вход через Google</a>
+        </li>
+    {% endif %}
+</ul>
+
+<p class="text-center">
+    Сегодня: <br><br>
+    {{ current_date }} <br>
+    {% if current_week == 1 %}
+        Первая учебная неделя <br>
+    {% else %}
+        Вторая учебная неделя <br>
+    {% endif %}
+</p>
+
+
+
+
+<script>
+    $('ul.nav-tabs nav-stacked li a').click(function (e) {
+        $('ul.nav-tabs nav-stacked li.active').removeClass('active')
+        $(this).parent('li').addClass('active')
+    })
+</script>
+

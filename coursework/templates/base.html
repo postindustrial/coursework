@@ -23,7 +23,7 @@
             }
         </style>
         <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
-        <link rel="stylesheet" href="{{ STATIC_URL }}css/main.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/header-template.css">
         {% endblock %}
         <script src="{{ STATIC_URL }}js/vendor/modernizr-2.6.2.min.js"></script>
         {% block script %}{% endblock %}
@@ -34,23 +34,48 @@
         <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
         <div class="container-fluid"></div>
 
-        <div class="row-fluid">
-        <div class="span12">
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="brand" href="/">Расписание ВМИ</a>
-                        <ul class="nav">
-                            <li><a href="/home">Свежее</a></li>
-                            <li><a href="/full">Полное</a></li>
-                            <li><a href="/schedule">Группы</a></li>
-                        </ul>
-                </div>
-            </div>
-        </div>
-        </div>
-        </div>
+        <div class="row-fluid" style="">
 
+        <table class="tpl-table-root" cellspacing="0" cellpadding="0">
+        <tbody>
+        <tr>
+            <td class="tpl-left-margin" rowspan="0">
+            </td>
+            <td class="tpl-table-logo" style="width: 20%">
+                <a href="http://computer.susu.ac.ru">
+                    <img src="{{ STATIC_URL }}images/tpl-logo.gif" class="style1"></a>
+            </td>
+            <td class="tpl-header">
+                <table class="tpl-header-table" cellspacing="0" cellpadding="0">
+                    <tbody><tr>
+                        <td class="tpl-header-title" style="height: 72px">
+                            <div class="tpl-header-a"><a style="color: #0a6b3d" href="Http://susu.ac.ru">Южно-Уральский государственный
+                                Национальный исследовательский университет</a></div>
+                            <span class="tpl-header-b">Факультет Вычислительной математики и информатики</span>
+                        </td>
+                        <td class="tpl-header-address" style="height: 72px; text-align: center;" rowspan="2">
+                            <a href="http://susu.ac.ru/">
+                                <img alt="Южно-Уральский государственный университет" class="style1" height="90" src="{{ STATIC_URL }}images/susu-logo.png" style="float: right"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tpl-header-line" colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    </tbody></table>
+            </td>
+            <td class="tpl-right-margin" rowspan="3">
+            </td>
+        </tr>
+
+        </tbody>
+        </table>
+        </div>
+        <div class="row-fluid">
+            <br>
+            <br>
+        </div>
         <div class="row-fluid">
             <div class="span2 offset1" style="position: fixed">
                 {% include "hello.html" %}
