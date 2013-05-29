@@ -1,8 +1,15 @@
-
+<p class="text-center">
+    {{ current_date }} <br>
+    {% if current_week == 1 %}
+        Первая учебная неделя <br>
+    {% else %}
+        Вторая учебная неделя <br>
+    {% endif %}
+</p>
 
 <ul class="nav nav-tabs nav-pills nav-stacked">
     {% if user.group %}
-    <li class=active>
+    <li>
         <a href="/home">Свежее</a>
     </li>
     <li>
@@ -30,14 +37,5 @@
     {% endif %}
 </ul>
 
-<p class="text-center">
-    Сегодня: <br><br>
-    {{ current_date }} <br>
-    {% if current_week == 1 %}
-        Первая учебная неделя <br>
-    {% else %}
-        Вторая учебная неделя <br>
-    {% endif %}
-</p>
 
 
