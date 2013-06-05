@@ -1,0 +1,89 @@
+BEGIN;
+CREATE TABLE "info_major" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(100) NOT NULL,
+    "code" varchar(10) NOT NULL
+)
+;
+CREATE TABLE "info_group" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(7) NOT NULL,
+    "major_id" integer NOT NULL REFERENCES "info_major" ("id")
+)
+;
+CREATE TABLE "info_student_groups" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "student_id" integer NOT NULL,
+    "group_id" integer NOT NULL REFERENCES "auth_group" ("id"),
+    UNIQUE ("student_id", "group_id")
+)
+;
+CREATE TABLE "info_student_user_permissions" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "student_id" integer NOT NULL,
+    "permission_id" integer NOT NULL REFERENCES "auth_permission" ("id"),
+    UNIQUE ("student_id", "permission_id")
+)
+;
+CREATE TABLE "info_student" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "password" varchar(128) NOT NULL,
+    "last_login" datetime NOT NULL,
+    "is_superuser" bool NOT NULL,
+    "username" varchar(30) NOT NULL UNIQUE,
+    "first_name" varchar(30) NOT NULL,
+    "last_name" varchar(30) NOT NULL,
+    "email" varchar(75) NOT NULL,
+    "is_staff" bool NOT NULL,
+    "is_active" bool NOT NULL,
+    "date_joined" datetime NOT NULL,
+    "patronymic" varchar(20) NOT NULL,
+    "group" varchar(7) NOT NULL
+)
+;
+CREATE TABLE "info_building" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(4) NOT NULL
+)
+;
+CREATE TABLE "info_teacher" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "last_name" varchar(25) NOT NULL,
+    "initials" varchar(4) NOT NULL,
+    "full_name" varchar(50) NOT NULL,
+    "post" varchar(100) NOT NULL
+)
+;
+CREATE TABLE "info_course" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(100) NOT NULL
+)
+;
+CREATE TABLE "info_taughtcourse" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name_id" integer NOT NULL REFERENCES "info_course" ("id"),
+    "group_id" integer NOT NULL REFERENCES "info_group" ("id"),
+    "teacher_id" integer NOT NULL REFERENCES "info_teacher" ("id"),
+    "hours" integer NOT NULL,
+    "final" integer NOT NULL
+)
+;
+CREATE TABLE "info_schedule" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "week" integer NOT NULL,
+    "weekday" integer NOT NULL,
+    "begin_time" integer NOT NULL,
+    "end_time" integer NOT NULL,
+    "course_id" integer NOT NULL REFERENCES "info_taughtcourse" ("id"),
+    "room" varchar(10) NOT NULL,
+    "building_id" integer NOT NULL REFERENCES "info_building" ("id")
+)
+;
+CREATE TABLE "info_settings" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "student_id" integer NOT NULL REFERENCES "info_student" ("id"),
+    "schedule_id" integer NOT NULL REFERENCES "info_schedule" ("id")
+)
+;
+
+COMMIT;
